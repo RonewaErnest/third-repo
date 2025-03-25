@@ -11,22 +11,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          submodules: recursive  # Ensure submodules are pulled if needed
+          submodules: recursive
 
       - name: Debug files
-        run: ls -R  # Check repo structure to verify package.json exists
+        run: ls -R  # Verify files are in root (package.json should appear)
 
       - name: Install dependencies
-        run: npm ci
-        working-directory: my-app  # Change if package.json is inside a subfolder
+        run: npm ci  # No working-directory needed!
 
       - name: Lint code
         run: npm run lint
-        working-directory: my-app  # Change if needed
 
       - name: Test code
         run: npm run test
-        working-directory: my-app  # Change if needed
 
   build:
     needs: test
@@ -39,11 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-        working-directory: my-app  # Ensure correct working directory
 
       - name: Build website
         run: npm run build
-        working-directory: my-app  # Ensure correct working directory
 
   deploy:
     needs: build
