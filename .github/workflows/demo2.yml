@@ -30,11 +30,17 @@ jobs:
       - name: Get code
         uses: actions/checkout@v3
 
-      - name: Check for package-lock.json
+      - name: Verify working directory
         run: |
-          if [ ! -f package-lock.json ]; then
-            echo "package-lock.json not found. Running npm install to generate it."
-            npm install
+          echo "Current working directory: $(pwd)"
+          echo "Files in the directory:"
+          ls -la
+
+      - name: Ensure package.json exists
+        run: |
+          if [ ! -f package.json ]; then
+            echo "Error: package.json not found! Check repository structure."
+            exit 1
           fi
 
       - name: Install dependencies
@@ -48,3 +54,4 @@ jobs:
 
       - name: Deploy project
         run: echo "Deploying..."
+
