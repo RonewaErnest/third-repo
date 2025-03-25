@@ -1,4 +1,4 @@
-name: Deploy Website2
+name: Deploy Website
 on:
   push:
     branches:
@@ -11,18 +11,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          path: '03 Finished Project'  # Checks out repo into this subdirectory
 
-      - name: Debug files
-        run: ls -R  # Verify files are in root (package.json should appear)
+      - name: Verify files
+        run: |
+          ls -la "03 Finished Project/"
+          ls -la "03 Finished Project/src"  # Debug paths
 
       - name: Install dependencies
-        run: npm ci  # No working-directory needed!
+        working-directory: "03 Finished Project"  # All npm commands run here
+        run: npm ci
 
       - name: Lint code
+        working-directory: "03 Finished Project"
         run: npm run lint
 
       - name: Test code
+        working-directory: "03 Finished Project"
         run: npm run test
 
   build:
@@ -32,12 +37,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          submodules: recursive
+          path: '03 Finished Project'
 
       - name: Install dependencies
+        working-directory: "03 Finished Project"
         run: npm ci
 
       - name: Build website
+        working-directory: "03 Finished Project"
         run: npm run build
 
   deploy:
@@ -45,4 +52,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
-        run: echo "Deploying..."
+        working-directory: "03 Finished Project"
+        run: echo "Deploying from 03 Finished Project directory"
